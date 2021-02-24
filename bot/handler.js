@@ -1,8 +1,8 @@
 const response = require("./response.json")
 
-var timer = false;
+var timer = [];
 var timeHolder;
-var drawList = [];
+var drawList = {};
 
 const indexOfNeed = (message) => {
     if (message.content.indexOf(' ') === -1) {
@@ -55,11 +55,7 @@ module.exports = {
 
     },
 
-    draw: (message) => {
-        message.channel.send(`The winner is ${drawList[Math.floor(Math.random() * drawList.length)]}`)
 
-
-    },
 
     joinVoiceChat: (message) => {
         console.log("I am joining voice channel");
@@ -68,30 +64,49 @@ module.exports = {
 
     },
 
-    addDraw: (message) => {
-        if (drawList.length < 20)
-            if (indexOfNeed(message) != 0) {
-                drawList.push((message.content).substr(indexOfNeed(message), message.content.length - 1));
-            }
-    },
+
 
     sendMeme: (message, memePic) => {
         message.channel.send(memePic);
 
     },
     startTimer: async (message) => {
-        if (timer == false) {
-            timer = true;
-            timeHolder = message.author.username;
+        if (timer[message.author.tag] == (false || undefined) && message.content.substr(indexOfNeed(message), message.content.length)<30) {
+            timer[message.author.tag] = true;
             message.channel.send(`Timer set to ${message.content.substr(indexOfNeed(message), message.content.length)} minutes.`)
-            setTimeout(() => { message.reply("Timer is done"); timer = false; }, message.content.substr(indexOfNeed(message), message.content.length) * 60000)
-
-        } else {
-            message.channel.send(timeHolder + " currently using timer !");
+            setTimeout(() => { message.reply(`Your timer is done ${message.guild.member(message.author).nickname}`); timer[message.author.tag] = false; }, message.content.substr(indexOfNeed(message), message.content.length) * 60000)
+ 
+        } else if(timer[message.author.tag] == (false || undefined) && message.content.substr(indexOfNeed(message), message.content.length)>30){
+            message.channel.send(response.MAX_TIMER_LIMIT);
+        }
+        else{
+            message.channel.send(response.ALREADY_USING_TIMER);
 
         }
 
     },
+
+    draw: (message) => {
+        if(drawList[message.author.tag]&&drawList[message.author.tag].length!==0)
+        message.channel.send(`The winner is ${drawList[message.author.tag][Math.floor(Math.random() * drawList[message.author.tag].length)]}`)
+        else
+        message.reply(response.EMPTY_DRAWLIST)
+
+    },
+
+    addDraw: (message) => {
+        if (indexOfNeed(message) != 0) {
+        if ( !drawList[message.author.tag] ||drawList[message.author.tag].length < 20 ){
+                if(!drawList[message.author.tag])
+                drawList[message.author.tag]=[]
+                
+                drawList[message.author.tag].push((message.content).substr(indexOfNeed(message)+1, message.content.length - 1));
+                
+        }
+    }else
+        message.channel.send(response.MISUSE_OF_COMMAND)
+    },
+
     deleteDrawList: () => {
 
         drawList = [];
@@ -121,7 +136,7 @@ module.exports = {
     bounce: (message) => {
         const guild = message.guild;
         const member = guild.member(message.author);
-        message.reply(`I hear you ${message.member.user.username} !`)
+        message.reply(`I hear you ${member.nickname} !`)
         console.log();
         return
     },
