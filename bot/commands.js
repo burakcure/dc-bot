@@ -50,6 +50,12 @@ module.exports = {
             case 12:
                 handler.startTimer(message);
                 break;
+            case 13:
+                handler.clearAll(message,client);
+                break;
+            case 14:
+                handler.clear20(message,client);
+                break;
             default:
                 message.reply(`There is no command named ${getCommand} you can look at the list of commands using .help`)
         }

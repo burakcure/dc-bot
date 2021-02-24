@@ -1,4 +1,4 @@
-const startBot = require("./bot/startBot")
+const bot = require("./bot/start")
 
 
-startBot.start;
+bot.start();

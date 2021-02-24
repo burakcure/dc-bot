@@ -11,5 +11,7 @@
     "join": 9,
     "leave": 10,
     "play": 11,
-    "timer": 12
+    "timer": 12,
+    "clearall":13,
+    "clear20":14
 }

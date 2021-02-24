@@ -122,6 +122,7 @@ module.exports = {
         const guild = message.guild;
         const member = guild.member(message.author);
         message.reply(`I hear you ${message.member.user.username} !`)
+        console.log();
         return
     },
 
@@ -130,5 +131,22 @@ module.exports = {
             const memberSize = message.member.voice.channel.members.array();
             message.reply(` There is ${memberSize.length} member in your voice channel`)
         }
+    },
+    clearAll:(message,client)=>{
+       if(message.member.hasPermission('MANAGE_MESSAGES')&&message.guild.me.hasPermission('MANAGE_MESSAGES')){
+        message.channel.messages.fetch(200)
+        .then((messages) =>{          
+           messages.forEach(element=>{if(element.author.tag==message.guild.me.user.tag)element.delete()})}
+            )
+       }
+    },
+    clear20:(message,client)=>{
+
+        if(message.member.hasPermission('MANAGE_MESSAGES')&&message.guild.me.hasPermission('MANAGE_MESSAGES')){
+            message.channel.messages.fetch(20)
+            .then((messages) =>{          
+               messages.forEach(element=>{element.delete()})}
+                ).catch(console.error())
+           }
     }
 };

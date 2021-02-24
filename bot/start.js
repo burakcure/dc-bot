@@ -8,6 +8,8 @@ player = new Player(client);//
 client.player = player;
 
 
+
+
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`)
 })
@@ -28,7 +30,7 @@ const start = () => {
     client.login(config.discord.token)//config.config.discord.token);
 
 }
-exports.start = start();
+exports.start = start;
 
 
 
