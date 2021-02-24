@@ -42,7 +42,7 @@ module.exports = {
                 handler.joinVoiceChat(message);
                 break;
             case 10:
-                handler.disconnectVoice(message, client);
+                handler.disconnectVoice(message);
                 break;
             case 11:
                 handler.playSound(message, client);
@@ -54,10 +54,13 @@ module.exports = {
                 handler.clearAll(message,client);
                 break;
             case 14:
-                handler.clear20(message,client);
+                handler.clearx(message,20);
+                break;
+            case 15:
+                handler.clearx(message,50);
                 break;
             default:
-                message.reply(`There is no command named ${getCommand} you can look at the list of commands using .help`)
+                message.reply(`There is no command named **${getCommand}** you can look at the list of commands using .help`)
         }
 
     }

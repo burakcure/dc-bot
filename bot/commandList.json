@@ -13,5 +13,6 @@
     "play": 11,
     "timer": 12,
     "clearall":13,
-    "clear20":14
+    "clear20":14,
+    "clear50":15
 }

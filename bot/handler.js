@@ -38,10 +38,10 @@ module.exports = {
             client.player.play(message, message.content.substr(indexOfNeed(message), message.content.length), true);
         }
     },
-    disconnectVoice: (message, client) => {
-        if (message.guild.voice.connection != null && message.guild.voice.channel.id==message.member.voice.channel.id)
+    disconnectVoice: (message) => {
+        if (message.guild.me.voice.connection != null && message.guild.voice.channel.id==message.member.voice.channel.id)
             message.guild.voice.channel.leave();
-        else if(message.guild.voice.connection!=null && message.guild.voice.channel.id!=message.member.voice.channel.id)
+        else if(message.guild.me.voice.connection!=null && message.guild.voice.channel.id!=message.member.voice.channel.id)
         message.channel.send(response.NOT_IN_SAME_VOICE_CHANNEL)
         else{
 
@@ -133,20 +133,25 @@ module.exports = {
         }
     },
     clearAll:(message,client)=>{
-       if(message.member.hasPermission('MANAGE_MESSAGES')&&message.guild.me.hasPermission('MANAGE_MESSAGES')){
-        message.channel.messages.fetch(200)
+        
+        if(message.member.hasPermission('MANAGE_MESSAGES')&&message.guild.me.hasPermission('MANAGE_MESSAGES')){
+        message.channel.messages.fetch(250)
         .then((messages) =>{          
-           messages.forEach(element=>{if(element.author.tag==message.guild.me.user.tag)element.delete()})}
-            )
+            let bulkMessage=[];
+           messages.forEach(element=>{if(element.author.tag==message.guild.me.user.tag)bulkMessage.push(element)})
+           message.channel.bulkDelete(bulkMessage)
+        }).then(
+            message.channel.send("Success"))
+            
        }
     },
-    clear20:(message,client)=>{
+    clearx:(message,amount)=>{
 
         if(message.member.hasPermission('MANAGE_MESSAGES')&&message.guild.me.hasPermission('MANAGE_MESSAGES')){
-            message.channel.messages.fetch(20)
+            message.channel.messages.fetch(amount)
             .then((messages) =>{          
-               messages.forEach(element=>{element.delete()})}
-                ).catch(console.error())
+               message.channel.bulkDelete(messages)}
+                ).then(message.channel.send("Delete succesful")).catch(console.error())
            }
     }
 };
