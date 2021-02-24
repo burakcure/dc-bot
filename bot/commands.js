@@ -33,7 +33,7 @@ module.exports = {
                 handler.addDraw(message);
                 break;
             case 7:
-                handler.deleteDrawList();
+                handler.deleteDrawList(message.author.tag);
                 break;
             case 8:
                 handler.drawList(message);

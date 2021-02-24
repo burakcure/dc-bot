@@ -1,7 +1,6 @@
 const response = require("./response.json")
 
 var timer = [];
-var timeHolder;
 var drawList = {};
 
 const indexOfNeed = (message) => {
@@ -34,7 +33,7 @@ module.exports = {
     },
     playSound: (message, client) => {
         if (indexOfNeed(message) != 0) {
-            client.player.moveTo
+            
             client.player.play(message, message.content.substr(indexOfNeed(message), message.content.length), true);
         }
     },
@@ -107,18 +106,26 @@ module.exports = {
         message.channel.send(response.MISUSE_OF_COMMAND)
     },
 
-    deleteDrawList: () => {
+    deleteDrawList: (owner) => {
 
-        drawList = [];
+        drawList[owner]=[];
 
     },
 
     drawList: (message) => {
-        let resp = "Drawlist:\n"
-        for (let i = 0; i < drawList.length; i++) {
-            resp += (drawList[i] + "\n");
+        if(drawList[message.author.tag] && drawList[message.author.tag].length!==0){
+            let resp = "Drawlist:\n"
+            for (let i = 0; i < drawList[message.author.tag].length; i++) {
+                resp += (drawList[message.author.tag][i] + "\n");
+            }
+            message.channel.send(resp)
+            return;
+        }else{
+            
+            message.channel.send(response.EMPTY_DRAWLIST)
         }
-        message.channel.send(resp)
+
+       
 
     },
     connectedChannel: (message) => {
