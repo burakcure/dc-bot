@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@discordjs/opus": "^0.4.0",
+    "discord-player": "^3.3.2",
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "ffmpeg": "^0.0.4",
+    "find-config": "^1.0.0",
+    "install": "^0.13.0",
+    "npm": "^7.5.4"
+  }
+}

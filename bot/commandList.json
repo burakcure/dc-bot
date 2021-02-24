@@ -1,0 +1,15 @@
+{
+    "help": 0,
+    "split": 1,
+    "hear": 2,
+    "channel": 3,
+    "random": 4,
+    "draw": 5,
+    "+draw": 6,
+    "-draw": 7,
+    "drawlist": 8,
+    "join": 9,
+    "leave": 10,
+    "play": 11,
+    "timer": 12
+}
