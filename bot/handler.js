@@ -39,9 +39,11 @@ module.exports = {
         }
     },
     disconnectVoice: (message, client) => {
-        if (message.member.voice.channel !== null)
-            message.member.voice.channel.leave();
-        else {
+        if (message.guild.voice.connection != null && message.guild.voice.channel.id==message.member.voice.channel.id)
+            message.guild.voice.channel.leave();
+        else if(message.guild.voice.connection!=null && message.guild.voice.channel.id!=message.member.voice.channel.id)
+        message.channel.send(response.NOT_IN_SAME_VOICE_CHANNEL)
+        else{
 
             message.channel.send(response.ALREADY_DISCONNECTED);
         }

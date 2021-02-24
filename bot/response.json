@@ -2,5 +2,6 @@
     "MISUSE_OF_COMMAND": "Misuse of the command.",
     "HELP_TEXT": "Komutların başına . koyarak onları çalıştırabilirsiniz  \nrandom: rastgele bir sayı üretir \nplay: bir şarkı açar\nstop:şarkıyı durdurur\nsasirdim:şaşırmanızı sağlar\nrandomperson:konuşmada olan rastgele birini seçer\n+draw [EŞYA_İSMİ]:çekilişe birşey eklemenizi sağlar\n-draw:çekilişi sıfırlar\ndraw:çekilişi yapar\ndrawlist:çekilişin içeriğini gösterir\ntimer [SAYI]: girdiğiniz sayı dakikasında bir sayaç oluşturur bitince size haber verir\nheyecanlandim: heyecanlandığınızda her zaman yanınızda",
     "ALREADY_DISCONNECTED": "I'm already disconnected",
-    "NOT_IN_VOICE_CHANNEL": "You are not in a voice channel!"
+    "NOT_IN_VOICE_CHANNEL": "You are not in a voice channel!",
+    "NOT_IN_SAME_VOICE_CHANNEL":"You are not in the same voice channel"
 }
