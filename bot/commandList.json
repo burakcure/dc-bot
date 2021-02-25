@@ -14,5 +14,6 @@
     "timer": 12,
     "clearall":13,
     "clear20":14,
-    "clear50":15
+    "clear50":15,
+    "skip":16
 }

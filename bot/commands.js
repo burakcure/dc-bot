@@ -10,6 +10,7 @@ module.exports = {
         }
         var getCommand = message.content.substr(1, commandLast)
         console.log(commandList[getCommand])
+        try{
         switch (commandList[getCommand]) {
             case 0:
                 handler.help(message)
@@ -45,7 +46,9 @@ module.exports = {
                 handler.disconnectVoice(message);
                 break;
             case 11:
-                handler.playSound(message, client);
+                    handler.playSound(message, client)
+                    console.error()
+               
                 break;
             case 12:
                 handler.startTimer(message);
@@ -59,12 +62,21 @@ module.exports = {
             case 15:
                 handler.clearx(message,50);
                 break;
+            case 16:
+                    handler.skipSound(message,client)   
+                
+            break;
             default:
                 message.reply(`There is no command named **${getCommand}** you can look at the list of commands using .help`)
+            }
+        }catch{
+
+                console.error()
+            }
         }
 
     }
 
 
-}
+
 

@@ -31,10 +31,40 @@ module.exports = {
         message.channel.send(response.HELP_TEXT);
 
     },
+    skipSound:(message,client)=>{
+        if(client.player.isPlaying(message)===true){
+        client.player.skip(message)
+        if(client.player.getQueue(message)!==undefined){
+                let resp = "Your Queue:\n"
+                let skippedCheck=false
+                client.player.getQueue(message).tracks.forEach((track)=> 
+                {    if (skippedCheck==true)
+                    resp += (`${track.title} -  ${track.duration}\n`);
+                    skippedCheck=true;
+                })
+                if(client.player.getQueue(message).tracks.length!=1)
+                message.channel.send(resp)}
+        }
+            
+    },
     playSound: (message, client) => {
         if (indexOfNeed(message) != 0) {
             
-            client.player.play(message, message.content.substr(indexOfNeed(message), message.content.length), true);
+            client.player.play(message, message.content.substr(indexOfNeed(message), message.content.length), true).then(()=>{
+                if(client.player.getQueue(message)!==undefined){
+                    let resp = "Your Queue:\n"
+                    
+                    client.player.getQueue(message).tracks.forEach((track)=> 
+                    {  
+                        resp += (`${track.title} -  ${track.duration}\n`);
+                        
+                    })
+                    message.channel.send(resp)}
+
+                }
+                );
+
+            
         }
     },
     disconnectVoice: (message) => {
@@ -115,9 +145,9 @@ module.exports = {
     drawList: (message) => {
         if(drawList[message.author.tag] && drawList[message.author.tag].length!==0){
             let resp = "Drawlist:\n"
-            for (let i = 0; i < drawList[message.author.tag].length; i++) {
-                resp += (drawList[message.author.tag][i] + "\n");
-            }
+            drawList[message.author.tag].forEach((drawElement)=> {
+                resp += (drawElement + "\n");
+            })
             message.channel.send(resp)
             return;
         }else{

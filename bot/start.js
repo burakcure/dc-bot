@@ -23,7 +23,6 @@ client.on('message', message => {
 
 
 
-
 const start = () => {
 
     console.log(config.discord.token);
