@@ -17,6 +17,7 @@ client.on('ready', () => {
 
 client.on('message', message => {
     if (message.content[0] == config.discord.prefix) {
+
         commands.commandProcess(message, client);
     }
 })
@@ -26,6 +27,7 @@ client.on('message', message => {
 const start = () => {
 
     console.log(config.discord.token);
+    commands.cooldown();
     client.login(config.discord.token)//config.config.discord.token);
 
 }

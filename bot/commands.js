@@ -1,9 +1,25 @@
 const handler = require('./handler')
 const commandList = require('./commandList.json')
 
+var cooldownOfUsers=[];
+
+
 
 module.exports = {
+     cooldown:()=>{
+         setInterval(()=>{
+         try{
+    Object.keys(cooldownOfUsers).forEach(element => {
+        if(cooldownOfUsers[element]!=0){
+            cooldownOfUsers[element]--
+            console.log(cooldownOfUsers[element]);
+        }}) ;
+    
+     }catch{}},1000)},
     commandProcess: (message, client) => {
+        if(cooldownOfUsers[message.author.tag]===undefined||cooldownOfUsers[message.author.tag]==0){
+
+        cooldownOfUsers[message.author.tag]=3;
         var commandLast = message.content.length - 1;
         if (message.content.indexOf(' ') != -1) {
             commandLast = message.content.indexOf(' ') - 1;
@@ -46,9 +62,8 @@ module.exports = {
                 handler.disconnectVoice(message);
                 break;
             case 11:
-                    handler.playSound(message, client)
-                    console.error()
-               
+                handler.playSound(message, client)
+                console.error()
                 break;
             case 12:
                 handler.startTimer(message);
@@ -63,9 +78,8 @@ module.exports = {
                 handler.clearx(message,50);
                 break;
             case 16:
-                    handler.skipSound(message,client)   
-                
-            break;
+                handler.skipSound(message,client)   
+                break;
             default:
                 message.reply(`There is no command named **${getCommand}** you can look at the list of commands using .help`)
             }
@@ -74,8 +88,17 @@ module.exports = {
                 console.error()
             }
         }
+        else{
+                message.reply("You can only send command every 3 seconds")
 
+        }
+    
     }
+
+
+}
+   
+
 
 
 

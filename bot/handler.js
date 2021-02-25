@@ -3,7 +3,7 @@ const response = require("./response.json")
 var timer = [];
 var drawList = {};
 
-const indexOfNeed = (message) => {
+const argumentHandler = (message) => {
     if (message.content.indexOf(' ') === -1) {
         message.channel.send(response.MISUSE_OF_COMMAND);
         return 0;
@@ -48,23 +48,26 @@ module.exports = {
             
     },
     playSound: (message, client) => {
-        if (indexOfNeed(message) != 0) {
-            
-            client.player.play(message, message.content.substr(indexOfNeed(message), message.content.length), true).then(()=>{
-                if(client.player.getQueue(message)!==undefined){
-                    let resp = "Your Queue:\n"
-                    
-                    client.player.getQueue(message).tracks.forEach((track)=> 
-                    {  
-                        resp += (`${track.title} -  ${track.duration}\n`);
+        if (argumentHandler(message) != 0) {
+            if(message.member.voice.channel){
+                client.player.play(message, message.content.substr(argumentHandler(message), message.content.length), true).then(()=>{
+                    if(client.player.getQueue(message)!==undefined){
+                        let resp = "Your Queue:\n"
                         
-                    })
-                    message.channel.send(resp)}
+                        client.player.getQueue(message).tracks.forEach((track)=> 
+                        {  
+                            resp += (`${track.title} -  ${track.duration}\n`);
+                            
+                        })
+                        message.channel.send(resp)}
+    
+                    }
+                    );
+            }else{
+                message.reply(response.NOT_IN_VOICE_CHANNEL)
 
-                }
-                );
+            }
 
-            
         }
     },
     disconnectVoice: (message) => {
@@ -80,7 +83,27 @@ module.exports = {
     playMeme: (message, meme) => {
 
 
-        client.player.play(message, meme);
+        if (argumentHandler(message) != 0) {
+            if(message.member.voice.channel){
+                client.player.play(message, meme).then(()=>{
+                    if(client.player.getQueue(message)!==undefined){
+                        let resp = "Your Queue:\n"
+                        
+                        client.player.getQueue(message).tracks.forEach((track)=> 
+                        {  
+                            resp += (`${track.title} -  ${track.duration}\n`);
+                            
+                        })
+                        message.channel.send(resp)}
+    
+                    }
+                    );
+            }else{
+                message.reply(response.NOT_IN_VOICE_CHANNEL)
+
+            }
+
+        }
 
     },
 
@@ -96,16 +119,17 @@ module.exports = {
 
 
     sendMeme: (message, memePic) => {
+
         message.channel.send(memePic);
 
     },
     startTimer: async (message) => {
-        if (timer[message.author.tag] == (false || undefined) && message.content.substr(indexOfNeed(message), message.content.length)<30) {
+        if (timer[message.author.tag] == (false || undefined) && message.content.substr(argumentHandler(message), message.content.length)<30) {
             timer[message.author.tag] = true;
-            message.channel.send(`Timer set to ${message.content.substr(indexOfNeed(message), message.content.length)} minutes.`)
-            setTimeout(() => { message.reply(`Your timer is done ${message.guild.member(message.author).nickname}`); timer[message.author.tag] = false; }, message.content.substr(indexOfNeed(message), message.content.length) * 60000)
+            message.channel.send(`Timer set to ${message.content.substr(argumentHandler(message), message.content.length)} minutes.`)
+            setTimeout(() => { message.reply(`Your timer is done ${message.guild.member(message.author).nickname}`); timer[message.author.tag] = false; }, message.content.substr(argumentHandler(message), message.content.length) * 60000)
  
-        } else if(timer[message.author.tag] == (false || undefined) && message.content.substr(indexOfNeed(message), message.content.length)>30){
+        } else if(timer[message.author.tag] == (false || undefined) && message.content.substr(argumentHandler(message), message.content.length)>30){
             message.channel.send(response.MAX_TIMER_LIMIT);
         }
         else{
@@ -124,12 +148,12 @@ module.exports = {
     },
 
     addDraw: (message) => {
-        if (indexOfNeed(message) != 0) {
+        if (argumentHandler(message) != 0) {
         if ( !drawList[message.author.tag] ||drawList[message.author.tag].length < 20 ){
                 if(!drawList[message.author.tag])
                 drawList[message.author.tag]=[]
                 
-                drawList[message.author.tag].push((message.content).substr(indexOfNeed(message)+1, message.content.length - 1));
+                drawList[message.author.tag].push((message.content).substr(argumentHandler(message)+1, message.content.length - 1));
                 
         }
     }else
@@ -146,7 +170,7 @@ module.exports = {
         if(drawList[message.author.tag] && drawList[message.author.tag].length!==0){
             let resp = "Drawlist:\n"
             drawList[message.author.tag].forEach((drawElement)=> {
-                resp += (drawElement + "\n");
+                resp += (drawElement + "\n")
             })
             message.channel.send(resp)
             return;
