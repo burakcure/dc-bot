@@ -1,5 +1,5 @@
 const response = require("./response.json")
-
+const customCommand=require("./customCommand.js")
 var timer = [];
 var drawList = {};
 
@@ -10,6 +10,17 @@ const argumentHandler = (message) => {
     }
     return message.content.indexOf(' ');
 
+
+}
+const multipleArgumentHandler =(message)=>{
+    if((message.content.split(" ")[1]!=undefined)){
+        return message.content.split(" ");
+
+    }
+    else{
+        message.channel.send(response.MISUSE_OF_COMMAND);
+        return 0;
+    }
 
 }
 const isVoiceChatting = (message) => {
@@ -71,7 +82,7 @@ module.exports = {
         }
     },
     disconnectVoice: (message) => {
-        if (message.guild.me.voice.connection != null && message.guild.voice.channel.id==message.member.voice.channel.id)
+        if (message.guild.me.voice.channelID != null && message.guild.voice.channel.id==message.member.voice.channel.id)
             message.guild.voice.channel.leave();
         else if(message.guild.me.voice.connection!=null && message.guild.voice.channel.id!=message.member.voice.channel.id)
         message.channel.send(response.NOT_IN_SAME_VOICE_CHANNEL)
@@ -80,30 +91,18 @@ module.exports = {
             message.channel.send(response.ALREADY_DISCONNECTED);
         }
     },
-    playMeme: (message, meme) => {
+    playMeme: (message,client, meme) => {
 
-
-        if (argumentHandler(message) != 0) {
+           // this.disconnectVoice(message)
+       
             if(message.member.voice.channel){
-                client.player.play(message, meme).then(()=>{
-                    if(client.player.getQueue(message)!==undefined){
-                        let resp = "Your Queue:\n"
-                        
-                        client.player.getQueue(message).tracks.forEach((track)=> 
-                        {  
-                            resp += (`${track.title} -  ${track.duration}\n`);
-                            
-                        })
-                        message.channel.send(resp)}
-    
-                    }
-                    );
+                client.player.play(message, meme,true);
             }else{
                 message.reply(response.NOT_IN_VOICE_CHANNEL)
 
             }
 
-        }
+        
 
     },
 
@@ -229,5 +228,16 @@ module.exports = {
                message.channel.bulkDelete(messages)}
                 ).then(message.channel.send("Delete succesful")).catch(console.error())
            }
-    }
+    },
+    addCommand:(message,customCommandFile)=>{
+            if(multipleArgumentHandler(message)!=0&&multipleArgumentHandler(message).length>3){
+                let args=multipleArgumentHandler(message);
+                let cm=new customCommand.CustomCommand(args[1],message.author.tag,args[2],args[3]);
+                return cm.save(customCommandFile);
+
+ 
+            }
+
+    },
+
 };

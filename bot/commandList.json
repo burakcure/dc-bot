@@ -15,5 +15,8 @@
     "clearall":13,
     "clear20":14,
     "clear50":15,
-    "skip":16
+    "skip":16,
+    "addCommand":17,
+    "playCommand":100,
+    "sendCommand":101
 }
