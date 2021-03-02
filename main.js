@@ -1,10 +1,5 @@
 const bot = require("./bot/start")
 
-function cleanUpServer(options, exitCode) {
- 
-    bot.stop()
-}
-
 process.stdin.resume();
 function exitHandler(options, exitCode) {
     bot.stop();

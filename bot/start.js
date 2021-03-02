@@ -27,6 +27,7 @@ client.on('message', message => {
 const start = () => {
 
     console.log(config.discord.token);
+    commands.autosave();
     commands.cooldown();
     client.login(config.discord.token)//config.config.discord.token);
 

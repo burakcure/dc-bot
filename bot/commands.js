@@ -29,7 +29,13 @@ module.exports = {
         }}) ;
     
      }catch{}},1000)},
-
+     autosave:()=>{
+        setInterval(()=>{
+        
+       try{
+        this.save();
+   
+    }catch{}},300000)},
     commandProcess: (message, client) => {
 
         if(cooldownOfUsers[message.author.tag]===undefined||cooldownOfUsers[message.author.tag]==0){
