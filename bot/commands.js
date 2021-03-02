@@ -1,33 +1,51 @@
 const handler = require('./handler')
 const commandList = require('./commandList.json')
+const fs = require('fs');
 let customCommandList=require('./customCommand.json')
 var cooldownOfUsers=[];
 
 
 
 module.exports = {
+    save:()=>{
+        const saveData=JSON.stringify(customCommandList);
+
+        fs.writeFileSync('bot/customCommand.json', saveData, () => {
+            process.exit();
+        });
+    
+    
+    },
+
      cooldown:()=>{
          setInterval(()=>{
-         try{
-    Object.keys(cooldownOfUsers).forEach(element => {
+         
+        try{
+        Object.keys(cooldownOfUsers).forEach(element => {
+
         if(cooldownOfUsers[element]!=0){
             cooldownOfUsers[element]--
            
         }}) ;
     
      }catch{}},1000)},
+
     commandProcess: (message, client) => {
 
         if(cooldownOfUsers[message.author.tag]===undefined||cooldownOfUsers[message.author.tag]==0){
 
         cooldownOfUsers[message.author.tag]=3;
         var commandLast = message.content.length - 1;
+
         if (message.content.indexOf(' ') != -1) {
             commandLast = message.content.indexOf(' ') - 1;
         }
+
         var getCommand = message.content.substr(1, commandLast)
         console.log(commandList[getCommand])
+
         try{
+
             let switchStatement=commandList[getCommand]
             if(customCommandList[getCommand]&&!switchStatement){
                 switchStatement=customCommandList[getCommand].Type
@@ -35,10 +53,11 @@ module.exports = {
 
 
         switch (parseInt(switchStatement)) {
+
             case 0:
                 handler.help(message)
                 break;
-                
+
             case 1:
                 handler.channelUserNumber(message)
                 break;

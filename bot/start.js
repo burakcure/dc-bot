@@ -31,7 +31,13 @@ const start = () => {
     client.login(config.discord.token)//config.config.discord.token);
 
 }
+const stop = () => {
+
+        commands.save();
+}
 exports.start = start;
+exports.stop=stop;
+
 
 
 

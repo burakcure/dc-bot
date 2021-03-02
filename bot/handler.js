@@ -3,13 +3,15 @@ const customCommand=require("./customCommand.js")
 var timer = [];
 var drawList = {};
 
+
+
+
 const argumentHandler = (message) => {
     if (message.content.indexOf(' ') === -1) {
         message.channel.send(response.MISUSE_OF_COMMAND);
         return 0;
     }
     return message.content.indexOf(' ');
-
 
 }
 const multipleArgumentHandler =(message)=>{
