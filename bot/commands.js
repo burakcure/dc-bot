@@ -31,7 +31,7 @@ const isCustomCommand=(commandText,userId,guildId)=>{
 }
 
 module.exports = {
-    save:()=>{
+    saveExit:()=>{
         const saveData=JSON.stringify(customCommandList);
 
         fs.writeFileSync('bot/customCommand.json', saveData, () => {
@@ -39,7 +39,7 @@ module.exports = {
         });
     
     
-    },
+    },   
 
      cooldown:()=>{
          setInterval(()=>{
@@ -56,10 +56,13 @@ module.exports = {
      autosave:()=>{
         setInterval(()=>{
         
-       try{
-        this.save();
+            const saveData=JSON.stringify(customCommandList);
+
+            fs.writeFile('bot/customCommand.json', saveData)
+        
+        
    
-    }catch{}},300000)},
+    },3000)},
     commandProcess: (message, client) => {
       
         var getCommand = getCommandFromMessage(message);

@@ -34,7 +34,7 @@ const start = () => {
 }
 const stop = () => {
 
-        commands.save();
+        commands.saveExit();
 }
 exports.start = start;
 exports.stop=stop;
