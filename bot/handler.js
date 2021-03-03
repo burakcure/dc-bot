@@ -63,6 +63,7 @@ module.exports = {
     playSound: (message, client) => {
         if (argumentHandler(message) != 0) {
             if(message.member.voice.channel){
+                
                 client.player.play(message, message.content.substr(argumentHandler(message), message.content.length), true).then(()=>{
                     if(client.player.getQueue(message)!==undefined){
                         let resp = "Your Queue:\n"

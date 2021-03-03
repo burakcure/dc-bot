@@ -62,7 +62,7 @@ module.exports = {
         
         
    
-    },3000)},
+    },300000)},
     commandProcess: (message, client) => {
       
         var getCommand = getCommandFromMessage(message);
