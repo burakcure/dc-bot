@@ -1,7 +1,7 @@
 const handler = require('./handler')
-const commandList = require('./commandList.json')
+const commandList = require('./JSON/commandList.json')
 const fs = require('fs');
-let customCommandList=require('./customCommand.json');
+let customCommandList=require('./JSON/customCommand.json');
 var cooldownOfUsers=[];
 
 const getCommandFromMessage=(message)=>{
@@ -34,7 +34,7 @@ module.exports = {
     saveExit:()=>{
         const saveData=JSON.stringify(customCommandList);
 
-        fs.writeFileSync('bot/customCommand.json', saveData, () => {
+        fs.writeFileSync('bot/JSON/customCommand.json', saveData, () => {
             process.exit();
         });
     
@@ -58,7 +58,7 @@ module.exports = {
         
             const saveData=JSON.stringify(customCommandList);
 
-            fs.writeFile('bot/customCommand.json', saveData)
+            fs.writeFile('bot/JSON/customCommand.json', saveData)
         
         
    
@@ -144,6 +144,7 @@ module.exports = {
                 break;
 
             case 17:
+
                 let ret=handler.addCommand(message,customCommandList)
                 if(ret==-1){
                     message.reply("Command couldn't be saved.")

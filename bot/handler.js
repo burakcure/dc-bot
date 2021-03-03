@@ -1,4 +1,4 @@
-const response = require("./response.json")
+const response = require("./JSON/response.json")
 const customCommand=require("./customCommandHandler.js")
 var timer = [];
 var drawList = {};
