@@ -6,5 +6,7 @@
     "NOT_IN_SAME_VOICE_CHANNEL":"You are not in the same voice channel",
     "MAX_TIMER_LIMIT":"Maximum timer limit is 30 minutes !",
     "ALREADY_USING_TIMER":"You are already using timer !",
-    "EMPTY_DRAWLIST":"Your drawlist is empty."
+    "EMPTY_DRAWLIST":"Your drawlist is empty.",
+    "COMMAND_ADD_FAILED":"You couldn't add the command",
+    "COMMAND_ADD_SUCCESS":"Command added successfully"
 }

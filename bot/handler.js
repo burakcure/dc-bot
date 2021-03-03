@@ -1,5 +1,5 @@
 const response = require("./response.json")
-const customCommand=require("./customCommand.js")
+const customCommand=require("./customCommandHandler.js")
 var timer = [];
 var drawList = {};
 
@@ -124,6 +124,7 @@ module.exports = {
         message.channel.send(memePic);
 
     },
+
     startTimer: async (message) => {
         if (timer[message.author.tag] == (false || undefined) && message.content.substr(argumentHandler(message), message.content.length)<30) {
             timer[message.author.tag] = true;
@@ -234,7 +235,8 @@ module.exports = {
     addCommand:(message,customCommandFile)=>{
             if(multipleArgumentHandler(message)!=0&&multipleArgumentHandler(message).length>3){
                 let args=multipleArgumentHandler(message);
-                let cm=new customCommand.CustomCommand(args[1],message.author.tag,args[2],args[3]);
+                
+                let cm=new customCommand.CustomCommand(message.guild.id,message.member.id,args[1],args[2],args.splice(3,args.length-1).join(" "));
                 return cm.save(customCommandFile);
 
  

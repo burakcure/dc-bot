@@ -1,10 +1,34 @@
 const handler = require('./handler')
 const commandList = require('./commandList.json')
 const fs = require('fs');
-let customCommandList=require('./customCommand.json')
+let customCommandList=require('./customCommand.json');
 var cooldownOfUsers=[];
 
+const getCommandFromMessage=(message)=>{
+  
+    if(cooldownOfUsers[message.author.tag]===undefined||cooldownOfUsers[message.author.tag]==0){
 
+        cooldownOfUsers[message.author.tag]=3;
+        var commandLast = message.content.length - 1;
+
+        if (message.content.indexOf(' ') != -1) {
+            commandLast = message.content.indexOf(' ') - 1;
+        }
+
+        return message.content.substr(1, commandLast)
+    }else
+    message.reply("You can only send command every 3 seconds")
+
+    return -1;
+
+}
+
+const isCustomCommand=(commandText,userId,guildId)=>{
+    if(!commandList[commandText]&&customCommandList[guildId+commandText+userId]){
+        return customCommandList[guildId+commandText+userId].Type;
+    }
+    return commandList[commandText];
+}
 
 module.exports = {
     save:()=>{
@@ -37,28 +61,15 @@ module.exports = {
    
     }catch{}},300000)},
     commandProcess: (message, client) => {
-
-        if(cooldownOfUsers[message.author.tag]===undefined||cooldownOfUsers[message.author.tag]==0){
-
-        cooldownOfUsers[message.author.tag]=3;
-        var commandLast = message.content.length - 1;
-
-        if (message.content.indexOf(' ') != -1) {
-            commandLast = message.content.indexOf(' ') - 1;
-        }
-
-        var getCommand = message.content.substr(1, commandLast)
-        console.log(commandList[getCommand])
-
+      
+        var getCommand = getCommandFromMessage(message);
+        let guildId=message.guild.id;
+        let userId=message.member.user.id;
+        if(getCommand!=-1)
         try{
 
-            let switchStatement=commandList[getCommand]
-            if(customCommandList[getCommand]&&!switchStatement){
-                switchStatement=customCommandList[getCommand].Type
-            }
-
-
-        switch (parseInt(switchStatement)) {
+  
+        switch (parseInt(isCustomCommand(getCommand,userId,guildId))) {
 
             case 0:
                 handler.help(message)
@@ -132,18 +143,19 @@ module.exports = {
             case 17:
                 let ret=handler.addCommand(message,customCommandList)
                 if(ret==-1){
-                    message.reply("Not successful")
+                    message.reply("Command couldn't be saved.")
                 }else{
+                    message.reply("Command saved successfully")
                     customCommandList=ret;
                 }
                 break;
 
             case 100:
-                handler.playMeme(message,client,customCommandList[getCommand].Link)
+                handler.playMeme(message,client,customCommandList[guildId+getCommand+userId].Link)
                 break;
 
             case 101:
-                handler.sendMeme(message,customCommandList[getCommand].Link)
+                handler.sendMeme(message,customCommandList[guildId+getCommand+userId].Link)
                 break;
 
             default:
@@ -151,18 +163,14 @@ module.exports = {
             }
         }catch{
 
-                console.error()
+                message.reply("Failed")
             }
         }
-        else{
-                message.reply("You can only send command every 3 seconds")
 
-        }
-    
     }
 
 
-}
+
    
 
 
