@@ -1,4 +1,4 @@
 node_modules
 .vscode
 .env
-/bot/customCommand.json
+/bot/json/customCommand.json

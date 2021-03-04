@@ -242,7 +242,18 @@ module.exports = {
 
  
             }
+            return -1
 
     },
+    deleteCommand:(message,customCommandFile)=>{
+        if(multipleArgumentHandler(message)!=0&&multipleArgumentHandler(message).length>1){
+            let args=multipleArgumentHandler(message);
+            
+            let cm=new customCommand.CustomCommand(message.guild.id,message.member.id,args[1],args[2],args.splice(3,args.length-1).join(" "));
+            return cm.delete(customCommandFile);
 
+
+        }
+        return -1
+},
 };

@@ -17,6 +17,7 @@
     "clear50":15,
     "skip":16,
     "addCommand":17,
+    "deleteCommand":18,
     "playCommand":100,
     "sendCommand":101
 }

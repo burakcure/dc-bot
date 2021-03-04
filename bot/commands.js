@@ -52,13 +52,13 @@ module.exports = {
            
         }}) ;
     
-     }catch{}},1000)},
+     }catch{}},3000)},
      autosave:()=>{
         setInterval(()=>{
         
             const saveData=JSON.stringify(customCommandList);
 
-            fs.writeFile('bot/JSON/customCommand.json', saveData)
+            fs.writeFile('bot/JSON/customCommand.json', saveData,()=>{})
         
         
    
@@ -151,9 +151,21 @@ module.exports = {
                 }else{
                     message.reply("Command saved successfully")
                     customCommandList=ret;
+                   
                 }
                 break;
 
+            case 18:
+
+                let retDel=handler.deleteCommand(message,customCommandList)
+                if(ret==-1){
+                    message.reply("Command couldn't be deleted.")
+                }else{
+                    message.reply("Command deleted successfully")
+                    customCommandList=retDel;
+                   
+                }
+                break;
             case 100:
                 handler.playMeme(message,client,customCommandList[guildId+getCommand+userId].Link)
                 break;

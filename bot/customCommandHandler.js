@@ -6,6 +6,7 @@ class CustomCommand{
         this.Owner=owner;
         this.Type=type;
         this.Link=link;
+        
 
    }
    commandType={
@@ -15,7 +16,7 @@ class CustomCommand{
    }
   
    save(customCommandFile){
-    if((this.commandType[this.Type]!=undefined)&&customCommandFile[this.GuildId+this.Command+this.Owner]==undefined){
+    if((this.commandType[this.Type]!=undefined)&&customCommandFile[this.GuildId+this.Command+this.Owner]==undefined&&this.Link!=undefined&&this.Command!=undefined&&this.Type!=undefined){
         
       
         
@@ -28,6 +29,23 @@ class CustomCommand{
         return -1;
 
     }
+   }
+
+   delete(customCommandFile){
+    if( customCommandFile[this.GuildId+this.Command+this.Owner]!=undefined){
+        
+      
+        
+        delete customCommandFile[this.GuildId+this.Command+this.Owner];
+      
+        
+
+        return customCommandFile;
+    }else{
+        return -1;
+
+    }
+
    }
 
 }
