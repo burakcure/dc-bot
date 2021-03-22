@@ -292,7 +292,11 @@ module.exports = {
                 replyString=replyString+element.CommandName+"\n"
                 counter++
                 if(counter==30){
+                    
+                    if(firstSend==false)
                     message.reply(replyString)
+                    else
+                    message.channel.send(replyString)
                     counter=0
                     firstSend=true
                     replyString=""
@@ -302,7 +306,7 @@ module.exports = {
             if(firstSend==false)
             message.reply(replyString)
             else
-            message.send(replyString)
+            message.channel.send(replyString)
         }else
             message.reply("You have no command")
 
