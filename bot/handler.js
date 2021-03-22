@@ -34,7 +34,13 @@ const isVoiceChatting = (message) => {
     return true;
 
 }
-
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+  }
 
 
 
@@ -280,10 +286,23 @@ module.exports = {
         const commandList=await db.findAll({where:{GuildID:message.guild.id,OwnerID:message.member.id}})
         if(commandList.length>0){
             let replyString="Your commands are;\n";
+            let counter=0
+            let firstSend=false
             commandList.forEach((element)=>{
                 replyString=replyString+element.CommandName+"\n"
+                counter++
+                if(counter==30){
+                    message.reply(replyString)
+                    counter=0
+                    firstSend=true
+                    replyString=""
+                    sleep(100)
+                }
             })
+            if(firstSend==false)
             message.reply(replyString)
+            else
+            message.send(replyString)
         }else
             message.reply("You have no command")
 
