@@ -18,6 +18,9 @@
     "skip":16,
     "addCommand":17,
     "deleteCommand":18,
+    "randomCommand":19,
+    "listCommand":20,
     "playCommand":100,
     "sendCommand":101
+    
 }

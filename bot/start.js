@@ -2,11 +2,13 @@ const Discord = require('discord.js')
 const { debug } = require('console')
 const { Player } = require("discord-player")
 const config = require("../config/config").initializeDiscordConfig()
+
 const commands=require('./commands.js')
+const { initCommands } = require('./commands.js')
 const client = new Discord.Client()
 player = new Player(client);//
 client.player = player;
-
+var database;
 
 
 
@@ -18,26 +20,29 @@ client.on('ready', () => {
 client.on('message', message => {
     if (message.content[0] == config.discord.prefix) {
 
-        commands.commandProcess(message, client);
+        commands.commandProcess(message, client,database);
     }
 })
 
 
 
-const start = () => {
+const start = async (db) => {
+    
+    database=db
 
     console.log(config.discord.token);
-    commands.autosave();
     commands.cooldown();
-    client.login(config.discord.token)//config.config.discord.token);
+    client.login(config.discord.token);
 
 }
+
 const stop = () => {
 
-        commands.saveExit();
+      
 }
+
 exports.start = start;
-exports.stop=stop;
+exports.stop = stop;
 
 
 

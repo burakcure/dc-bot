@@ -233,27 +233,59 @@ module.exports = {
                 ).then(message.channel.send("Delete succesful")).catch(console.error())
            }
     },
-    addCommand:(message,customCommandFile)=>{
+    addCommand:async (message,db)=>{
             if(multipleArgumentHandler(message)!=0&&multipleArgumentHandler(message).length>3){
                 let args=multipleArgumentHandler(message);
                 
                 let cm=new customCommand.CustomCommand(message.guild.id,message.member.id,args[1],args[2],args.splice(3,args.length-1).join(" "));
-                return cm.save(customCommandFile);
+                
+
+                return await cm.add(db);
 
  
             }
             return -1
 
     },
-    deleteCommand:(message,customCommandFile)=>{
+    deleteCommand:async (message,db)=>{
         if(multipleArgumentHandler(message)!=0&&multipleArgumentHandler(message).length>1){
             let args=multipleArgumentHandler(message);
-            
             let cm=new customCommand.CustomCommand(message.guild.id,message.member.id,args[1],args[2],args.splice(3,args.length-1).join(" "));
-            return cm.delete(customCommandFile);
+            return await cm.delete(db);
+    
 
 
         }
         return -1
 },
+    randomCommand:async (message,client,db)=>{
+        
+        const commandList=await db.findAll({where:{GuildID:message.guild.id,OwnerID:message.member.id}})
+        if(commandList.length>1){
+            const selectedCommand=Math.floor(Math.random() * ((commandList.length)));
+          
+            if(commandList[selectedCommand].CommandType==100){
+                console.log(commandList[selectedCommand].CommandLink)
+                module.exports.playMeme(message,client,commandList[selectedCommand].CommandLink)
+
+            }else{
+                module.exports.sendMeme(message,commandList[selectedCommand].CommandLink)
+
+            }
+        }
+
+    },
+    listCommand:async (message,db)=>{
+        
+        const commandList=await db.findAll({where:{GuildID:message.guild.id,OwnerID:message.member.id}})
+        if(commandList.length>0){
+            let replyString="Your commands are;\n";
+            commandList.forEach((element)=>{
+                replyString=replyString+element.CommandName+"\n"
+            })
+            message.reply(replyString)
+        }else
+            message.reply("You have no command")
+
+    },
 };

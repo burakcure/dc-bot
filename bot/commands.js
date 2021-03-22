@@ -1,7 +1,5 @@
 const handler = require('./handler')
 const commandList = require('./JSON/commandList.json')
-const fs = require('fs');
-let customCommandList=require('./JSON/customCommand.json');
 var cooldownOfUsers=[];
 
 const getCommandFromMessage=(message)=>{
@@ -23,23 +21,16 @@ const getCommandFromMessage=(message)=>{
 
 }
 
-const isCustomCommand=(commandText,userId,guildId)=>{
-    if(!commandList[commandText]&&customCommandList[guildId+commandText+userId]){
-        return customCommandList[guildId+commandText+userId].Type;
+const isCustomCommand=async (commandText,userId,guildId,db)=>{
+    let getFromDB=  await db.findOne({where:{GuildID:guildId,OwnerID:userId,CommandName:commandText}})
+    if(getFromDB!==null ){
+        return getFromDB;
     }
-    return commandList[commandText];
+    return false;
 }
 
 module.exports = {
-    saveExit:()=>{
-        const saveData=JSON.stringify(customCommandList);
 
-        fs.writeFileSync('bot/JSON/customCommand.json', saveData, () => {
-            process.exit();
-        });
-    
-    
-    },   
 
      cooldown:()=>{
          setInterval(()=>{
@@ -52,27 +43,23 @@ module.exports = {
            
         }}) ;
     
-     }catch{}},3000)},
-     autosave:()=>{
-        setInterval(()=>{
+     }catch{}},1000)},
+    commandProcess: async(message, client,db) => {
         
-            const saveData=JSON.stringify(customCommandList);
-
-            fs.writeFile('bot/JSON/customCommand.json', saveData,()=>{})
-        
-        
-   
-    },300000)},
-    commandProcess: (message, client) => {
-      
         var getCommand = getCommandFromMessage(message);
         let guildId=message.guild.id;
         let userId=message.member.user.id;
         if(getCommand!=-1)
         try{
 
-  
-        switch (parseInt(isCustomCommand(getCommand,userId,guildId))) {
+        let checkCustom=await isCustomCommand(getCommand,userId,guildId,db)
+        let type=0
+        if(checkCustom==false)
+            type=commandList[getCommand]
+        else
+            type= checkCustom.CommandType
+        
+        switch (parseInt(type)) {
 
             case 0:
                 handler.help(message)
@@ -145,41 +132,46 @@ module.exports = {
 
             case 17:
 
-                let ret=handler.addCommand(message,customCommandList)
+                let ret=await handler.addCommand(message,db)
                 if(ret==-1){
                     message.reply("Command couldn't be saved.")
                 }else{
                     message.reply("Command saved successfully")
-                    customCommandList=ret;
                    
                 }
                 break;
 
             case 18:
 
-                let retDel=handler.deleteCommand(message,customCommandList)
-                if(ret==-1){
+                let retH=await handler.deleteCommand(message,db)
+                if(retH==-1){
                     message.reply("Command couldn't be deleted.")
                 }else{
                     message.reply("Command deleted successfully")
-                    customCommandList=retDel;
+            
                    
                 }
                 break;
+            case 19:
+                await handler.randomCommand(message,client,db)
+            break;
+            case 20:
+                await handler.listCommand(message,db)
+            break
             case 100:
-                handler.playMeme(message,client,customCommandList[guildId+getCommand+userId].Link)
+                handler.playMeme(message,client,checkCustom.CommandLink)
                 break;
 
             case 101:
-                handler.sendMeme(message,customCommandList[guildId+getCommand+userId].Link)
+               handler.sendMeme(message,checkCustom.CommandLink)
                 break;
 
             default:
                 message.reply(`There is no command named **${getCommand}** you can look at the list of commands using .help`)
             }
         }catch{
-
-                message.reply("Failed")
+            
+            message.reply("Failed")
             }
         }
 

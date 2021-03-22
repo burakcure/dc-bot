@@ -14,33 +14,28 @@ class CustomCommand{
     "sound":100
 
    }
-  
-   save(customCommandFile){
-    if((this.commandType[this.Type]!=undefined)&&customCommandFile[this.GuildId+this.Command+this.Owner]==undefined&&this.Link!=undefined&&this.Command!=undefined&&this.Type!=undefined){
+ 
+   async add(db){
+    if((this.commandType[this.Type]!=undefined)&&this.Link!=undefined&&this.Command!=undefined&&this.Type!=undefined&&  (await db.findOne({where:{GuildID:this.GuildId,OwnerID:this.Owner,CommandName:this.Command}}))===null){
         
       
-        
-        customCommandFile[this.GuildId+this.Command+this.Owner]={Type:this.commandType[this.Type],Link:this.Link};
-      
-        
-
-        return customCommandFile;
+       await db.create({GuildID:this.GuildId,OwnerID:this.Owner,CommandName:this.Command,CommandType:this.commandType[this.Type],CommandLink:this.Link})
+    
+        return 1;
     }else{
         return -1;
 
     }
    }
 
-   delete(customCommandFile){
-    if( customCommandFile[this.GuildId+this.Command+this.Owner]!=undefined){
+   async delete(db){
+       let element=await db.findOne({where:{GuildID:this.GuildId,OwnerID:this.Owner,CommandName:this.Command}})
+    if( element!==null){
         
       
+        await db.destroy({where:{GuildID:this.GuildId,OwnerID:this.Owner,CommandName:this.Command}});
         
-        delete customCommandFile[this.GuildId+this.Command+this.Owner];
-      
-        
-
-        return customCommandFile;
+        return 1;
     }else{
         return -1;
 
