@@ -2,3 +2,4 @@ node_modules
 .vscode
 .env
 /bot/json/customCommand.json
+customCommand.json
