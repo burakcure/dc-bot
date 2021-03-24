@@ -97,8 +97,6 @@ module.exports = {
     }
   },
   playMeme: (message, client, meme) => {
-    // this.disconnectVoice(message)
-
     if (message.member.voice.channel) {
       client.player.play(message, meme, true);
     } else {
@@ -205,7 +203,7 @@ module.exports = {
   },
 
   random: (message, _) => {
-    message.channel.send("31");
+    message.channel.send(Math.floor(Math.random() * 101));
   },
 
   bounce: (message) => {
